@@ -1,2 +1,3 @@
+let arreglo;
 
-console.log("hola mundo")
+
