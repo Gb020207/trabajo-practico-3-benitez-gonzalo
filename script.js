@@ -53,25 +53,41 @@ const renderizarPersonajes = (personajes) => {
     });
     loading = false;
 }
-function buscar() {
-  const input = document.getElementById("buscarpersonaje");
-  const filtro = input.value.toUpperCase();
-  const lista = document.getElementById("listaElementos");
-  const elementosLista = lista.getElementsByTagName("li");
-  // const resultadosDiv = document.getElementById("resultadosBusqueda");
-  // resultadosDiv.innerHTML = ''; // Limpiar resultados anteriores si los usas
+const buscar = document.getElementById("botoncito")
+const inputBuscar = document.getElementById("input-buscar")
 
-  for (let i = 0; i < elementosLista.length; i++) {
-    const elemento = elementosLista[i];
-    const textoElemento = elemento.textContent || elemento.innerText;
-    if (textoElemento.toUpperCase().indexOf(filtro) > -1) {
-      elemento.style.display = ""; // Mostrar el elemento si coincide
-      // Si usas un div de resultados en lugar de filtrar la lista:
-      // const resultado = document.createElement('p');
-      // resultado.textContent = textoElemento;
-      // resultadosDiv.appendChild(resultado);
-    } else {
-      elemento.style.display = "none"; // Ocultar el elemento si no coincide
+buscar.addEventListener("click", async function () {
+
+    const valorInput = inputBuscar.value
+
+    if(valorInput === ""){
+        console.log("Debe escribir")
     }
-  }
-}
+
+    const respuesta = await fetch(`https://dragonball-api.com/api/characters?name=${valorInput}`)
+    const datos = await respuesta.json();
+    console.log(datos)
+  contenedorpadre.innerHTML = ""
+    datos.forEach(personaje => {
+        contenedorpadre.innerHTML += `
+                <div class="col-3 pb-2 d-flex justify-content-center" data-id=${personaje.id}>
+                    <div class="card bg-dark p-2 text-dark bg-opacity-10 mx-2 my-2" style="width: 500px;
+                     overflow: visible; position: relative;
+                     border: none;">
+                        <img
+                            class="card-img-top p-2 img-hover" alt=${personaje.name}
+                            style="width: 100%; height: 400px; object-fit: contain;"
+                            src="${personaje.image}"
+                        />
+                        <div class="card card-body">
+                            <h5 class="card-title">${personaje.name}</h5>
+                            <p class="card-text">${personaje.race} - ${personaje.gender}</p>
+                            <button class="btn btn-success btn-ver-detalles">Ver más</button>
+                        </div>
+                    </div>
+                </div>
+                `;
+    });
+
+
+});
