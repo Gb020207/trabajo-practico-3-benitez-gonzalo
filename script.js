@@ -24,12 +24,7 @@ traerpersonajes()
 const contenedorpadre = document.getElementById('padre-contenedor')
 const renderizarPersonajes = (personajes) => {
 
-    if (personajes.length === 0) {
-        contenedorpadre.innerHTML = `
-            <h2 class="text-center my-3">No se encontraron resultados.</h2>
-        `
-        return;
-    }
+
 
     personajes.forEach(personaje => {
         contenedorpadre.innerHTML += `
@@ -45,7 +40,7 @@ const renderizarPersonajes = (personajes) => {
                         <div class="card card-body">
                             <h5 class="card-title">${personaje.name}</h5>
                             <p class="card-text">${personaje.race} - ${personaje.gender}</p>
-                            <button class="btn btn-success btn-ver-detalles">Ver más</button>
+                            <button id="vermas" class="btn btn-success btn-ver-detalles">Ver más</button>
                         </div>
                     </div>
                 </div>
@@ -54,14 +49,22 @@ const renderizarPersonajes = (personajes) => {
     loading = false;
 }
 const buscar = document.getElementById("botoncito")
+const limpiar = document.getElementById("limpiar")
 const inputBuscar = document.getElementById("input-buscar")
-
 buscar.addEventListener("click", async function () {
 
-    const valorInput = inputBuscar.value
+    const valorInput = inputBuscar.value.trim();
+        if (valorInput === "") {
+        contenedorpadre.innerHTML = `
+            <h2 class="text-center my-3">No se encontraron resultados.</h2>
+        `
+        limpiar.addEventListener("click", async function() {
+            const limpieza = traerpersonajes()
+          contenedorpadre.innerHTML = `
+          <h2 class="text-center my-3">intente ingresar un nombre existente</h2>`
 
-    if(valorInput === ""){
-        console.log("Debe escribir")
+        })
+        return;
     }
 
     const respuesta = await fetch(`https://dragonball-api.com/api/characters?name=${valorInput}`)
@@ -82,7 +85,7 @@ buscar.addEventListener("click", async function () {
                         <div class="card card-body">
                             <h5 class="card-title">${personaje.name}</h5>
                             <p class="card-text">${personaje.race} - ${personaje.gender}</p>
-                            <button class="btn btn-success btn-ver-detalles">Ver más</button>
+                            <button id="vermas" class="btn btn-success btn-ver-detalles">Ver más</button>
                         </div>
                     </div>
                 </div>
@@ -91,3 +94,5 @@ buscar.addEventListener("click", async function () {
 
 
 });
+
+
